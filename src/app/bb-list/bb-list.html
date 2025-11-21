@@ -1,0 +1,48 @@
+<div class="vstack gap-3 my-4">
+  <div *ngFor="let bb of (bbs$ | async)" 
+       class="bbcard shadow border-0 rounded-4 overflow-hidden">
+    <div class="row g-0 p-3">
+      <!-- Изображение -->
+      <div class="col-md-2">
+        <a [routerLink]="[bb.id]">
+          <img *ngIf="bb.image" 
+               [src]="bb.image" 
+               class="img-fluid rounded-3" 
+               [alt]="bb.title"
+               style="width: 100%; height: 120px; object-fit: cover;">
+          <img *ngIf="!bb.image" 
+               src="assets/empty.jpg" 
+               class="img-fluid rounded-3" 
+               alt="Нет изображения"
+               style="width: 100%; height: 120px; object-fit: cover;">
+        </a>
+      </div>
+      
+      <!-- Контент -->
+      <div class="col-md-10">
+        <div class="card-body">
+          <h5 class="card-title mb-1">
+            <a [routerLink]="[bb.id]" class="text-decoration-none text-dark">
+              {{bb.title}}
+            </a>
+          </h5>
+          <p class="card-text text-muted small mb-2">
+            {{bb.content.length > 150 ? (bb.content | slice:0:150) + '...' : bb.content}}
+          </p>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="fw-semibold text-success fs-5">
+              {{bb.price | currency:'RUB':'symbol':'1.0-0':'ru'}}
+            </span>
+            <span class="text-secondary small">
+              {{bb.created_at | date:'dd.MM.yyyy HH:mm':'':'ru'}}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p *ngIf="(bbs$ | async)?.length === 0" class="text-muted text-center mt-4">
+    Пока нет объявлений.
+  </p>
+</div>

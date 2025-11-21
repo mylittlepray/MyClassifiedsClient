@@ -1,0 +1,30 @@
+.image img {
+  max-width: 100%;
+  height: auto;
+}
+
+.price {
+  font-size: larger;
+  font-weight: bold;
+}
+
+.date {
+  font-style: italic;
+  color: #666;
+}
+
+.comment {
+  margin: 15px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+form p {
+  margin: 10px 0;
+}
+
+textarea {
+  width: 100%;
+  min-height: 100px;
+}

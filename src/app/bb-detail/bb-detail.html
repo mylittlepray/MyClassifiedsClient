@@ -1,0 +1,103 @@
+<div class="text m-2">
+  <button class="btn btn-outline-dark" routerLink="/">
+    ← Назад к объявлениям
+  </button>
+</div>
+
+<div class="container mt-4" *ngIf="(bb$ | async) as bb">
+  <!-- Изображение -->
+  <div *ngIf="bb.image" class="text-center mb-4">
+    <img [src]="bb.image" 
+         class="img-fluid rounded" 
+         [alt]="bb.title"
+         style="max-height: 400px; object-fit: contain;">
+  </div>
+
+  <!-- Заголовок и описание -->
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <div class="card shadow-sm rounded-4 p-3">
+        <div class="card-body">
+          <h2 class="card-title">{{bb.title}}</h2>
+          <p class="card-text">{{bb.content}}</p>
+          <p class="fw-bold fs-5">{{bb.price | currency:'RUB':'symbol':'1.0-0':'ru'}}</p>
+          <p *ngIf="bb.contacts">{{bb.contacts}}</p>
+          <p class="text-end text-muted fst-italic mb-0">
+            Добавлено {{bb.created_at | date:'dd.MM.yyyy HH:mm':'':'ru'}}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Комментарии -->
+  <div class="card shadow-sm rounded-4 p-3 my-3">
+    <h4 class="card-title mb-3">Комментарии</h4>
+
+    <!-- Алерты -->
+    <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="fas fa-exclamation-circle me-2"></i>
+      {{ errorMessage }}
+      <button type="button" class="btn-close" (click)="closeAlert()"></button>
+    </div>
+
+    <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+      <i class="fas fa-check-circle me-2"></i>
+      {{ successMessage }}
+      <button type="button" class="btn-close" (click)="closeAlert()"></button>
+    </div>
+
+    <!-- Форма добавления комментария -->
+    <form (ngSubmit)="submitComment()" class="mb-4">
+      <div class="card shadow-sm rounded-4 p-3 mb-3">
+        <div class="mb-3">
+          <label class="form-label">Имя</label>
+          <input type="text" 
+                 class="form-control" 
+                 [(ngModel)]="author" 
+                 name="author" 
+                 required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Пароль</label>
+          <input type="password" 
+                 class="form-control" 
+                 [(ngModel)]="password" 
+                 name="password" 
+                 required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Содержание</label>
+          <textarea class="form-control" 
+                    rows="4" 
+                    [(ngModel)]="content" 
+                    name="content" 
+                    required></textarea>
+        </div>
+        <button type="submit" 
+                class="btn btn-primary"
+                [disabled]="!author || !password || !content">
+          Отправить
+        </button>
+      </div>
+    </form>
+
+    <!-- Список комментариев -->
+    <div class="vstack gap-3 mt-4" *ngIf="(comments$ | async) as comments">
+      <div *ngFor="let comment of comments" 
+           class="p-3 border rounded-4 shadow-sm">
+        <h5>{{comment.author}}</h5>
+        <p style="word-wrap: break-word; overflow-wrap: anywhere;">
+          {{comment.content}}
+        </p>
+        <p class="text-end fst-italic text-muted mb-0">
+          {{comment.created_at | date:'dd.MM.yyyy HH:mm':'':'ru'}}
+        </p>
+      </div>
+      
+      <p *ngIf="comments.length === 0" class="text-muted text-center">
+        Пока нет комментариев.
+      </p>
+    </div>
+  </div>
+</div>
